@@ -17,7 +17,6 @@ from service.common import status  # HTTP Status Codes
 from . import app
 
 
-
 ############################################################
 # Health Endpoint
 ############################################################
