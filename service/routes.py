@@ -11,11 +11,11 @@ from flask import (
     abort,
     url_for,
 )
-import json
 
 from service.models import Account
 from service.common import status  # HTTP Status Codes
-from . import app  # Import Flask application
+from . import app
+
 
 
 ############################################################
