@@ -6,11 +6,30 @@ and SQL database
 """
 import sys
 from flask import Flask
+
 from service import config
 from service.common import log_handlers
 
 # Create Flask application
 app = Flask(__name__)
+
+
+@app.after_request
+def set_security_headers(response):
+    """Set security and CORS headers"""
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers[
+        "Content-Security-Policy"
+    ] = "default-src 'self'; object-src 'none'"
+    response.headers[
+        "Referrer-Policy"
+    ] = "strict-origin-when-cross-origin"
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+
 app.config.from_object(config)
 
 # Import the routes After the Flask app is created
@@ -24,7 +43,9 @@ from service.common import error_handlers, cli_commands  # noqa: F401 E402
 log_handlers.init_logging(app, "gunicorn.error")
 
 app.logger.info(70 * "*")
-app.logger.info("  A C C O U N T   S E R V I C E   R U N N I N G  ".center(70, "*"))
+app.logger.info(
+    "  A C C O U N T   S E R V I C E   R U N N I N G  ".center(70, "*")
+)
 app.logger.info(70 * "*")
 
 try:
