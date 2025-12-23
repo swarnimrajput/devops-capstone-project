@@ -7,6 +7,7 @@ and SQL database
 import sys
 from flask import Flask
 from flask_talisman import Talisman
+from flask_cors import CORS
 
 from service import config
 from service.common import log_handlers
@@ -14,6 +15,7 @@ from service.common import log_handlers
 # Create Flask application
 app = Flask(__name__)
 talisman = Talisman(app)
+CORS(app)
 
 
 @app.after_request
